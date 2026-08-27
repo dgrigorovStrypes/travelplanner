@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Travel diary palette from ref/ designs */
+  --background: #faf8f2; /* warm cream */
+  --foreground: #2b2926; /* soft ink */
+  --card: #fdfbf6;
+  --card-foreground: #2b2926;
+  --popover: #fdfbf6;
+  --popover-foreground: #2b2926;
+  --primary: #2b2926;
+  --primary-foreground: #faf8f2;
+  --secondary: #fcd6d9; /* blush pink (table headers) */
+  --secondary-foreground: #2b2926;
+  --muted: #f2ede3;
+  --muted-foreground: #7c766c;
+  --accent: #fde5e7; /* light pink (table cells) */
+  --accent-foreground: #2b2926;
+  --destructive: #b4544c;
+  --destructive-foreground: #faf8f2;
+  --border: #55504a;
+  --input: #d8d2c6;
+  --ring: #d8a0a6;
+  --radius: 1rem;
+
+  /* extra tokens */
+  --blush: #fcd6d9;
+  --blush-mid: #fdd9dc;
+  --blush-soft: #fde5e7;
+  --blush-softer: #feeff0;
+  --rose: #dcbfc3; /* dusty rose highlight bars */
+  --rose-dotted: #e79ba4; /* dotted lines */
+  --terracotta: #a2634a; /* "add text" brown */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-blush: var(--blush);
+  --color-blush-mid: var(--blush-mid);
+  --color-blush-soft: var(--blush-soft);
+  --color-blush-softer: var(--blush-softer);
+  --color-rose: var(--rose);
+  --color-rose-dotted: var(--rose-dotted);
+  --color-terracotta: var(--terracotta);
+
+  --radius-sm: calc(var(--radius) - 8px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 8px);
+
+  --font-display: "Cormorant Garamond", "Georgia", serif;
+  --font-serif: "Source Serif 4", "Georgia", serif;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-serif antialiased;
+  }
+}
+
+@layer components {
+  /* Letter-spaced uppercase serif heading, as in the reference pages */
+  .diary-heading {
+    @apply font-display uppercase text-foreground;
+    letter-spacing: 0.35em;
+  }
+  /* Dotted pink writing line */
+  .dotted-line {
+    border-bottom: 3px dotted var(--rose-dotted);
+  }
+  /* Dusty-rose highlight bar behind sub-headings */
+  .rose-highlight {
+    @apply font-display;
+    background: linear-gradient(transparent 15%, var(--rose) 15%, var(--rose) 92%, transparent 92%);
+    padding-inline: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+}
