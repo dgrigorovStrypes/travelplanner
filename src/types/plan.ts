@@ -90,6 +90,7 @@ export interface TravelPlan {
   version: 1;
   city: string;
   country: string;
+  currency: "USD" | "EUR";
   overview: TripOverview;
   arrival: ArrivalDetails;
   days: DayPlan[];

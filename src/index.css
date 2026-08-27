@@ -100,3 +100,22 @@
     letter-spacing: 0.12em;
   }
 }
+
+@media print {
+  /* Hide interactive chrome */
+  .print\:hidden { display: none !important; }
+
+  /* Reset backgrounds so colors print */
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  body { background: white; }
+
+  /* Avoid breaking sections across pages */
+  section { break-inside: avoid; }
+
+  /* Remove sticky positioning on the cover header */
+  header { position: static; }
+
+  /* Ensure the cover fills one page */
+  #cover { min-height: 90vh; page-break-after: always; }
+}

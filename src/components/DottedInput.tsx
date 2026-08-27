@@ -36,6 +36,7 @@ interface LabeledDottedInputProps {
   value: string;
   onValueChange: (value: string) => void;
   className?: string;
+  type?: string;
 }
 
 /** "CHECK-OUT TIME  ........" row from the departure page. */
@@ -44,11 +45,12 @@ export function LabeledDottedInput({
   value,
   onValueChange,
   className,
+  type,
 }: LabeledDottedInputProps) {
   return (
     <label className={cn("block", className)}>
       <span className="diary-heading block text-lg sm:text-xl">{label}</span>
-      <DottedInput value={value} onValueChange={onValueChange} />
+      <DottedInput value={value} onValueChange={onValueChange} type={type} />
     </label>
   );
 }

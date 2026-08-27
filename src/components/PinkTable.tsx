@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 export interface PinkColumn<Row> {
   key: keyof Row & string;
   label: string;
+  /** Restrict cell to numeric input (digits, decimal point, minus). */
+  numeric?: boolean;
 }
 
 interface PinkTableProps<Row extends { id: string }> {
@@ -66,8 +68,21 @@ export function PinkTable<Row extends { id: string }>({
               >
                 <input
                   type="text"
+                  inputMode={col.numeric ? "decimal" : "text"}
                   value={String(row[col.key] ?? "")}
                   onChange={(e) => onCellChange(row.id, col.key, e.target.value)}
+                  onKeyDown={
+                    col.numeric
+                      ? (e) => {
+                          const allowed =
+                            e.key.length > 1 || // arrows, backspace, etc.
+                            e.ctrlKey ||
+                            e.metaKey ||
+                            /[\d.,\-]/.test(e.key);
+                          if (!allowed) e.preventDefault();
+                        }
+                      : undefined
+                  }
                   aria-label={col.label}
                   className="w-full bg-transparent px-3 py-6 text-center font-serif text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:text-base"
                 />

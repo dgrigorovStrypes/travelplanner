@@ -26,6 +26,7 @@ export function defaultPlan(): TravelPlan {
     version: 1,
     city: "Rome",
     country: "Italy",
+    currency: "EUR" as const,
     overview: {
       destination: "",
       country: "",

@@ -23,7 +23,7 @@ export function BookedActivities({ plan, update }: Props) {
             { key: "name", label: "Tour name" },
             { key: "startTime", label: "Start time" },
             { key: "endTime", label: "End time" },
-            { key: "price", label: "Price" },
+            { key: "price", label: "Price", numeric: true },
           ]}
           rows={plan.bookedActivities}
           onCellChange={(id, key, value) =>

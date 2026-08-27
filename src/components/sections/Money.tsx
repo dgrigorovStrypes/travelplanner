@@ -14,17 +14,21 @@ function toNumber(value: string): number {
   return Number.isFinite(n) ? n : 0;
 }
 
-function formatAmount(n: number): string {
-  return n.toLocaleString(undefined, {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  });
+function formatAmount(n: number, symbol: string): string {
+  return (
+    symbol +
+    n.toLocaleString(undefined, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    })
+  );
 }
 
 export function BudgetPlanner({ plan, update }: Props) {
   const setRows = (rows: BudgetRow[]) =>
     update((p) => ({ ...p, budget: rows }));
 
+  const sym = plan.currency === "USD" ? "$" : "€";
   const totalPlanned = plan.budget.reduce((s, r) => s + toNumber(r.planned), 0);
   const totalActual = plan.budget.reduce((s, r) => s + toNumber(r.actual), 0);
 
@@ -35,14 +39,15 @@ export function BudgetPlanner({ plan, update }: Props) {
         <PinkTable
           columns={[
             { key: "category", label: "Category" },
-            { key: "planned", label: "Planned" },
-            { key: "actual", label: "Actual" },
+            { key: "planned", label: `Planned (${sym})`, numeric: true },
+            { key: "actual", label: `Actual (${sym})`, numeric: true },
           ]}
           computed={{
             label: "Difference",
             value: (r) => {
               if (!r.planned && !r.actual) return "";
-              return formatAmount(toNumber(r.planned) - toNumber(r.actual));
+              const diff = toNumber(r.planned) - toNumber(r.actual);
+              return formatAmount(diff, sym);
             },
           }}
           rows={plan.budget}
@@ -61,9 +66,9 @@ export function BudgetPlanner({ plan, update }: Props) {
           addLabel="Add category"
           footer={
             <p className="font-serif text-sm text-muted-foreground sm:text-base">
-              Planned {formatAmount(totalPlanned)} · Actual{" "}
-              {formatAmount(totalActual)} · Difference{" "}
-              {formatAmount(totalPlanned - totalActual)}
+              Planned {formatAmount(totalPlanned, sym)} · Actual{" "}
+              {formatAmount(totalActual, sym)} · Difference{" "}
+              {formatAmount(totalPlanned - totalActual, sym)}
             </p>
           }
         />
@@ -76,6 +81,7 @@ export function ExpenseTracker({ plan, update }: Props) {
   const setRows = (rows: ExpenseRow[]) =>
     update((p) => ({ ...p, expenses: rows }));
 
+  const sym = plan.currency === "USD" ? "$" : "€";
   const total = plan.expenses.reduce((s, r) => s + toNumber(r.amount), 0);
 
   return (
@@ -87,7 +93,7 @@ export function ExpenseTracker({ plan, update }: Props) {
             { key: "date", label: "Date" },
             { key: "expense", label: "Expense" },
             { key: "category", label: "Category" },
-            { key: "amount", label: "Amount" },
+            { key: "amount", label: `Amount (${sym})`, numeric: true },
           ]}
           rows={plan.expenses}
           onCellChange={(id, key, value) =>
@@ -107,7 +113,7 @@ export function ExpenseTracker({ plan, update }: Props) {
           addLabel="Add expense"
           footer={
             <p className="font-serif text-sm text-muted-foreground sm:text-base">
-              Total {formatAmount(total)}
+              Total {formatAmount(total, sym)}
             </p>
           }
         />

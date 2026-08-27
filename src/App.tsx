@@ -16,7 +16,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen">
-      <TopBar plan={plan} replace={replace} reset={reset} />
+      <TopBar plan={plan} replace={replace} reset={reset} update={update} />
       <Cover plan={plan} update={update} />
       <TableOfContents />
       <Divider />
@@ -65,6 +65,10 @@ export default function App() {
       />
       <footer className="px-6 pb-16 pt-8 text-center">
         <p className="font-serif text-sm text-muted-foreground">
+          Travel Diary by{" "}
+          <span className="diary-heading text-xs">Vacationing in Style</span>
+        </p>
+        <p className="mt-2 font-serif text-xs text-muted-foreground">
           Your plan is saved in this browser and in the page URL — share the
           link or export a file to keep it safe.
         </p>

@@ -93,6 +93,7 @@ export const travelPlanSchema = z.object({
   version: z.literal(1),
   city: z.string().catch(""),
   country: z.string().catch(""),
+  currency: z.enum(["USD", "EUR"]).catch("EUR"),
   overview: overviewSchema,
   arrival: arrivalSchema,
   days: z.array(dayPlanSchema),
