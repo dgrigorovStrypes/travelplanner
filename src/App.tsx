@@ -10,13 +10,18 @@ import { BudgetPlanner, ExpenseTracker } from "@/components/sections/Money";
 import { BeforeYouGo, PackingList } from "@/components/sections/Checklists";
 import { Separator } from "@/components/ui/separator";
 import { usePlan } from "@/hooks/usePlan";
+import { exportToPDF } from "@/lib/pdf";
 
 export default function App() {
   const { plan, update, replace, reset } = usePlan();
 
+  const handleExportPdf = () => {
+    void exportToPDF(`${plan.city || "travel"}-diary.pdf`);
+  };
+
   return (
     <div className="min-h-screen">
-      <TopBar plan={plan} replace={replace} reset={reset} update={update} />
+      <TopBar plan={plan} replace={replace} reset={reset} update={update} onExportPdf={handleExportPdf} />
       <Cover plan={plan} update={update} />
       <TableOfContents />
       <Divider />

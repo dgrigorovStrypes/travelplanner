@@ -49,37 +49,63 @@ export function DailySchedule({ plan, update }: Props) {
       </div>
 
       {collapsed ? (
-        /* Collapsed mini-card grid */
-        <div className="mt-12 grid grid-cols-3 gap-3 sm:grid-cols-4">
-          <div className="rounded-2xl border border-foreground/20 bg-blush-soft px-3 py-4 text-center">
+        /* Collapsed card grid — bigger cards, readable text, ~2 rows */
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="rounded-2xl border border-foreground/20 bg-blush-soft px-4 py-5">
             <p className="diary-heading text-sm">Day 1</p>
-            <p className="mt-1 font-serif text-xs text-muted-foreground">
-              Arrival
-            </p>
+            <p className="diary-heading mt-2 text-[10px] tracking-widest opacity-40">ARRIVAL</p>
+            {plan.arrival.firstActivities ? (
+              <p className="mt-1 font-serif text-xs leading-relaxed">{plan.arrival.firstActivities}</p>
+            ) : (
+              <p className="mt-1 font-serif text-xs text-muted-foreground">—</p>
+            )}
           </div>
           {plan.days.map((day, index) => {
-            const preview =
-              [day.notes.morning, day.notes.afternoon, day.notes.evening]
-                .filter(Boolean)
-                .join(" · ")
-                .slice(0, 40) || "—";
+            const hasMorning = Boolean(day.notes.morning);
+            const hasAfternoon = Boolean(day.notes.afternoon);
+            const hasEvening = Boolean(day.notes.evening);
+            const hasAny = hasMorning || hasAfternoon || hasEvening;
             return (
               <div
                 key={day.id}
-                className="rounded-2xl border border-foreground/20 bg-blush-soft px-3 py-4 text-center"
+                className="rounded-2xl border border-foreground/20 bg-blush-soft px-4 py-5"
               >
                 <p className="diary-heading text-sm">Day {index + 2}</p>
-                <p className="mt-1 line-clamp-2 font-serif text-xs text-muted-foreground">
-                  {preview}
-                </p>
+                {hasAny ? (
+                  <div className="mt-2 space-y-2">
+                    {hasMorning && (
+                      <div>
+                        <p className="diary-heading text-[9px] tracking-widest opacity-40">MORNING</p>
+                        <p className="font-serif text-xs leading-relaxed">{day.notes.morning}</p>
+                      </div>
+                    )}
+                    {hasAfternoon && (
+                      <div>
+                        <p className="diary-heading text-[9px] tracking-widest opacity-40">AFTERNOON</p>
+                        <p className="font-serif text-xs leading-relaxed">{day.notes.afternoon}</p>
+                      </div>
+                    )}
+                    {hasEvening && (
+                      <div>
+                        <p className="diary-heading text-[9px] tracking-widest opacity-40">EVENING</p>
+                        <p className="font-serif text-xs leading-relaxed">{day.notes.evening}</p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <p className="mt-2 font-serif text-xs text-muted-foreground">—</p>
+                )}
               </div>
             );
           })}
-          <div className="rounded-2xl border border-foreground/20 bg-blush-soft px-3 py-4 text-center">
+          <div className="rounded-2xl border border-foreground/20 bg-blush-soft px-4 py-5">
             <p className="diary-heading text-sm">Day {plan.days.length + 2}</p>
-            <p className="mt-1 font-serif text-xs text-muted-foreground">
-              Departure
-            </p>
+            <p className="diary-heading mt-2 text-[10px] tracking-widest opacity-40">DEPARTURE</p>
+            {plan.departure.lastActivities ? (
+              <p className="mt-1 font-serif text-xs leading-relaxed">{plan.departure.lastActivities}</p>
+            ) : (
+              <p className="mt-1 font-serif text-xs text-muted-foreground">—</p>
+            )}
           </div>
         </div>
       ) : (

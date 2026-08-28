@@ -6,6 +6,8 @@ export interface PinkColumn<Row> {
   label: string;
   /** Restrict cell to numeric input (digits, decimal point, minus). */
   numeric?: boolean;
+  /** Render as a specific input type: date, time, or currency. */
+  type?: "text" | "date" | "time" | "currency";
 }
 
 interface PinkTableProps<Row extends { id: string }> {
@@ -15,6 +17,8 @@ interface PinkTableProps<Row extends { id: string }> {
   onAddRow: () => void;
   onRemoveRow: (rowId: string) => void;
   addLabel?: string;
+  /** Symbol for currency columns (e.g. "€" or "$"). */
+  currencySymbol?: string;
   /** Optional read-only trailing column (e.g. computed difference). */
   computed?: { label: string; value: (row: Row) => string };
   footer?: React.ReactNode;
@@ -31,6 +35,7 @@ export function PinkTable<Row extends { id: string }>({
   onAddRow,
   onRemoveRow,
   addLabel = "Add row",
+  currencySymbol = "€",
   computed,
   footer,
 }: PinkTableProps<Row>) {
@@ -66,26 +71,63 @@ export function PinkTable<Row extends { id: string }>({
                   i === 0 ? "bg-blush-mid" : "bg-blush-soft",
                 )}
               >
-                <input
-                  type="text"
-                  inputMode={col.numeric ? "decimal" : "text"}
-                  value={String(row[col.key] ?? "")}
-                  onChange={(e) => onCellChange(row.id, col.key, e.target.value)}
-                  onKeyDown={
-                    col.numeric
-                      ? (e) => {
-                          const allowed =
-                            e.key.length > 1 || // arrows, backspace, etc.
-                            e.ctrlKey ||
-                            e.metaKey ||
-                            /[\d.,\-]/.test(e.key);
-                          if (!allowed) e.preventDefault();
-                        }
-                      : undefined
-                  }
-                  aria-label={col.label}
-                  className="w-full bg-transparent px-3 py-6 text-center font-serif text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:text-base"
-                />
+                {col.type === "currency" ? (
+                  <div className="flex items-center justify-center gap-1 px-3 py-6">
+                    <span className="font-serif text-sm text-muted-foreground sm:text-base">
+                      {currencySymbol}
+                    </span>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={String(row[col.key] ?? "")}
+                      onChange={(e) => onCellChange(row.id, col.key, e.target.value)}
+                      onKeyDown={(e) => {
+                        const allowed =
+                          e.key.length > 1 || e.ctrlKey || e.metaKey || /[\d.,\-]/.test(e.key);
+                        if (!allowed) e.preventDefault();
+                      }}
+                      aria-label={col.label}
+                      className="w-full bg-transparent font-serif text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:text-base"
+                    />
+                  </div>
+                ) : col.type === "date" ? (
+                  <input
+                    type="date"
+                    value={String(row[col.key] ?? "")}
+                    onChange={(e) => onCellChange(row.id, col.key, e.target.value)}
+                    aria-label={col.label}
+                    className="w-full bg-transparent px-2 py-6 text-center font-serif text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:text-base"
+                  />
+                ) : col.type === "time" ? (
+                  <input
+                    type="time"
+                    value={String(row[col.key] ?? "")}
+                    onChange={(e) => onCellChange(row.id, col.key, e.target.value)}
+                    aria-label={col.label}
+                    className="w-full bg-transparent px-2 py-6 text-center font-serif text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:text-base"
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    inputMode={col.numeric ? "decimal" : "text"}
+                    value={String(row[col.key] ?? "")}
+                    onChange={(e) => onCellChange(row.id, col.key, e.target.value)}
+                    onKeyDown={
+                      col.numeric
+                        ? (e) => {
+                            const allowed =
+                              e.key.length > 1 ||
+                              e.ctrlKey ||
+                              e.metaKey ||
+                              /[\d.,\-]/.test(e.key);
+                            if (!allowed) e.preventDefault();
+                          }
+                        : undefined
+                    }
+                    aria-label={col.label}
+                    className="w-full bg-transparent px-3 py-6 text-center font-serif text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:text-base"
+                  />
+                )}
                 {i === 0 ? (
                   <button
                     type="button"

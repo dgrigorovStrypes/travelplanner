@@ -10,8 +10,25 @@ interface Props {
 }
 
 export function BookedActivities({ plan, update }: Props) {
+  const sym = plan.currency === "USD" ? "$" : "€";
+
   const setRows = (rows: BookedActivity[]) =>
     update((p) => ({ ...p, bookedActivities: rows }));
+
+  const handleCellChange = (id: string, key: string, value: string) => {
+    setRows(
+      plan.bookedActivities.map((r) => {
+        if (r.id !== id) return r;
+        const updated = { ...r, [key]: value };
+        // Auto-fill times with defaults when date is set and times are empty
+        if (key === "date" && value) {
+          if (!updated.startTime) updated.startTime = "09:00";
+          if (!updated.endTime) updated.endTime = "17:00";
+        }
+        return updated;
+      }),
+    );
+  };
 
   return (
     <section id="booked" className="mx-auto max-w-4xl px-6 py-20">
@@ -19,20 +36,15 @@ export function BookedActivities({ plan, update }: Props) {
       <div className="mt-14">
         <PinkTable
           columns={[
-            { key: "date", label: "Date" },
+            { key: "date", label: "Date", type: "date" },
             { key: "name", label: "Tour name" },
-            { key: "startTime", label: "Start time" },
-            { key: "endTime", label: "End time" },
-            { key: "price", label: "Price", numeric: true },
+            { key: "startTime", label: "Start time", type: "time" },
+            { key: "endTime", label: "End time", type: "time" },
+            { key: "price", label: "Price", type: "currency" },
           ]}
           rows={plan.bookedActivities}
-          onCellChange={(id, key, value) =>
-            setRows(
-              plan.bookedActivities.map((r) =>
-                r.id === id ? { ...r, [key]: value } : r,
-              ),
-            )
-          }
+          currencySymbol={sym}
+          onCellChange={handleCellChange}
           onAddRow={() =>
             setRows([
               ...plan.bookedActivities,

@@ -50,7 +50,7 @@ export function defaultPlan(): TravelPlan {
       transferFromAccommodation: "",
       station: "",
     },
-    wishlist: Array.from({ length: 9 }, () => ""),
+    wishlist: Array.from({ length: 3 }, () => ""),
     bookedActivities: [],
     restaurants: [],
     accommodation: {
@@ -169,6 +169,6 @@ export function defaultPlan(): TravelPlan {
         "Store a backup payment method separately",
       ]),
     ],
-    highlights: Array.from({ length: 12 }, () => ""),
+    highlights: Array.from({ length: 3 }, () => ""),
   };
 }

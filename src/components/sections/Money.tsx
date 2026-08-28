@@ -50,6 +50,7 @@ export function BudgetPlanner({ plan, update }: Props) {
               return formatAmount(diff, sym);
             },
           }}
+          currencySymbol={sym}
           rows={plan.budget}
           onCellChange={(id, key, value) =>
             setRows(
@@ -90,11 +91,12 @@ export function ExpenseTracker({ plan, update }: Props) {
       <div className="mt-14">
         <PinkTable
           columns={[
-            { key: "date", label: "Date" },
+            { key: "date", label: "Date", type: "date" },
             { key: "expense", label: "Expense" },
             { key: "category", label: "Category" },
-            { key: "amount", label: `Amount (${sym})`, numeric: true },
+            { key: "amount", label: `Amount (${sym})`, type: "currency" },
           ]}
+          currencySymbol={sym}
           rows={plan.expenses}
           onCellChange={(id, key, value) =>
             setRows(

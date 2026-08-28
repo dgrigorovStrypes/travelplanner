@@ -15,9 +15,10 @@ interface TopBarProps {
   replace: (plan: TravelPlan) => void;
   reset: () => void;
   update: (updater: (plan: TravelPlan) => TravelPlan) => void;
+  onExportPdf: () => void;
 }
 
-export function TopBar({ plan, replace, reset, update }: TopBarProps) {
+export function TopBar({ plan, replace, reset, update, onExportPdf }: TopBarProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -75,7 +76,7 @@ export function TopBar({ plan, replace, reset, update }: TopBarProps) {
             update((p) => ({ ...p, currency: v as "USD" | "EUR" }))
           }
         >
-          <SelectTrigger className="h-8 w-20 font-display text-xs tracking-[0.1em]">
+          <SelectTrigger className="h-8 w-28 font-display text-xs tracking-[0.1em]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -87,7 +88,7 @@ export function TopBar({ plan, replace, reset, update }: TopBarProps) {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => window.print()}
+          onClick={onExportPdf}
           className="font-display tracking-[0.1em]"
         >
           PDF
